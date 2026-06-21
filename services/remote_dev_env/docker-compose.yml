@@ -1,0 +1,50 @@
+services:
+  remote-dev-py3.12-torch2.11-cu12.6:
+    image: akihikokayaba/py3.12-torch2.11-cu12.6
+    container_name:
+      remote-dev-py3.12-torch2.11-cu12.6
+      # shm_size: "16gb"
+    tty: true
+    stdin_open: true
+    # SSH port on host -> container 22
+    ports:
+      - "0.0.0.0:2222:22"
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+
+    volumes:
+      - /win/flounder/user:/win/flounder/user
+      - /win/salmon/user:/win/salmon/user
+      - /win/conger/user:/win/conger/user
+      - /data01/user:/data01/user
+      - /data02/user:/data02/user
+      - /data03/user:/data03/user
+
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           capabilities: [gpu]
+    gpus: all
+
+    command: >
+      bash -lc "
+        set -e;
+        apt-get update;
+        DEBIAN_FRONTEND=noninteractive \
+          apt-get install -y --no-install-recommends openssh-server;
+        apt-get clean;
+        rm -rf /var/lib/apt/lists/*;
+
+        mkdir -p /var/run/sshd;
+        chmod 1777 /tmp || true;
+
+        id -u tmp >/dev/null 2>&1 || useradd -m -s /bin/bash tmp
+        echo 'tmp:tmp' | chpasswd;
+
+        sed -i 's/^#\\?PasswordAuthentication.*/PasswordAuthentication yes/' /etc/ssh/sshd_config;
+
+        /usr/sbin/sshd -D -e
+      "
