@@ -59,6 +59,8 @@ RUN --mount=type=cache,target=/root/.cache/uv \
         numpy \
         cupy-cuda12x \
         cucim-cu12 \
+        cutensor-cu12 \
+        nvidia-nccl-cu12 \
         mypy \
         ninja \
         psutil \

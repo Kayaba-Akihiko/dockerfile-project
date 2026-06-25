@@ -58,6 +58,8 @@ RUN --mount=type=cache,target=/root/.cache/uv \
         wheel \
         numpy \
         cupy-cuda13x \
+        cutensor-cu13 \
+        nvidia-nccl-cu13 \
         cucim-cu13 \
         mypy \
         ninja \
@@ -380,3 +382,9 @@ RUN set -eux; \
     python -c "from mmcv.ops import DeformConv2d; print('mmcv ops OK')"; \
     python -c "import mmseg; print(mmseg.__version__)"; \
     python -c "import mmpretrain; print(mmpretrain.__version__)"
+
+# Fix cupy
+RUN uv pip uninstall \
+        cupy-cuda12x cupy-cuda13x && \
+    uv pip install \
+        cupy-cuda13x
