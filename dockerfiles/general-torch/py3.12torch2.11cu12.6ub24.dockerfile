@@ -229,8 +229,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
         git+https://github.com/MIC-DKFZ/nnUNet.git@v2.8.0 \
         monai \
         "torchio[plot,csv]" \
-        point-cloud-utils \
-        "napari[all]"
+        point-cloud-utils
 
 RUN --mount=type=cache,target=/root/.cache/uv \
     case "$TARGETARCH" in \
