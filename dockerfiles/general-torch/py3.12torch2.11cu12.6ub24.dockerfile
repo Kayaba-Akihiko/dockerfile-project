@@ -7,7 +7,7 @@
 #  This file can not be copied and/or distributed
 #  without the express permission of Yi GU.
 
-# sudo docker buildx build --platform linux/amd64 --tag akihikokayaba/py3.12-torch2.11-cu12.6 --push . 2>&1 | tee /win/flounder/user/koku/temp/build.log
+# sudo docker buildx build --platform linux/amd64 --tag akihikokayaba/py3.12-torch2.11-cu12.6-ub24 --push . 2>&1 | tee /win/flounder/user/koku/temp/build.log
 
 
 FROM ghcr.io/astral-sh/uv:latest AS uv
@@ -229,7 +229,8 @@ RUN --mount=type=cache,target=/root/.cache/uv \
         git+https://github.com/MIC-DKFZ/nnUNet.git@v2.8.0 \
         monai \
         "torchio[plot,csv]" \
-        point-cloud-utils
+        point-cloud-utils \
+        "napari[all]"
 
 RUN --mount=type=cache,target=/root/.cache/uv \
     case "$TARGETARCH" in \
